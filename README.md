@@ -126,7 +126,6 @@ These parameters are the **main levers** you should use for:
 - The training loop logic  
 - The loss function  
 - The data loading logic  
-- The optimizer implementation  
 
 ### Where to implement CodeCarbon (training)
 
@@ -134,8 +133,6 @@ You must integrate **CodeCarbon** in this file to measure:
 
 - Energy consumption  
 - CO₂-equivalent emissions during training  
-
-**Hint:** wrap the main training loop with the CodeCarbon tracker.
 
 ---
 
@@ -176,15 +173,6 @@ You must also integrate **CodeCarbon** in this file to measure:
 
 ---
 
-## CPU vs GPU execution
-
-You are encouraged to compare:
-
-- CPU vs GPU training  
-- CPU vs GPU inference  
-
-and discuss the sustainability implications of both options, if a GPU is available. This comparison is not mandatory.
----
 
 ## Learning objectives
 

@@ -1,6 +1,8 @@
 """
 Inference / prompting script (Tiny Shakespeare, char-level).
 Students will integrate sustainability tracking themselves.
+
+Source: https://github.com/karpathy/nanoGPT
 """
 
 import os
@@ -38,8 +40,8 @@ def main():
     model_cfg = ckpt["config"]["model"]
 
     meta = load_meta(data_dir)
-    stoi = meta["stoi"]
-    itos = meta["itos"]
+    stoi = meta["stoi"]         # char to index mapping
+    itos = meta["itos"]         # index to char mapping
 
     def encode(s: str):
         # map unknown chars to a safe fallback if needed

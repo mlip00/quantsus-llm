@@ -3,7 +3,9 @@ Course training script (simplified from nanoGPT).
 
 Focus:
 - Train a small GPT-style model from scratch on a tiny dataset.
-- Students will integrate sustainability tracking (e.g., CodeCarbon) themselves.
+- Students will integrate sustainability tracking themselves.
+
+Source: https://github.com/karpathy/nanoGPT
 """
 
 import os
@@ -22,12 +24,12 @@ from model import GPTConfig, GPT
 # I/O
 OUT_DIR = "out"
 DATA_DIR = os.path.join("data")
-EVAL_INTERVAL = 200
+EVAL_INTERVAL = 200     
 EVAL_ITERS = 50
 LOG_INTERVAL = 50
 SAVE_CHECKPOINT = True
 
-# Model (main tunables you can and should experiment with)
+# Model (main tunables)
 N_LAYER = 4
 N_HEAD = 4
 N_EMBD = 128
@@ -35,15 +37,15 @@ DROPOUT = 0.1
 BIAS = True
 
 # Training (main parameters you can also experiment with)
-SEED = 1337
-DEVICE = "cpu" # If you can try also seeing consumption when using gpu (change this to 'cuda' if torch.cuda.is_available() else 'cpu')
-DTYPE = "float32" 
-BATCH_SIZE = 32
-BLOCK_SIZE = 256
-MAX_ITERS = 2000
-LEARNING_RATE = 3e-4
-WEIGHT_DECAY = 0.1
-GRAD_CLIP = 1.0
+SEED = 1
+DEVICE = "cpu"          # If you can, try also seeing consumption when using gpu (change this to 'cuda' if torch.cuda.is_available() else 'cpu')
+DTYPE = "float32"       
+BATCH_SIZE = 32         # Number of sequences processed in parallel.
+BLOCK_SIZE = 256        # Maximum context length for predictions (e.g. 128 or 256). The longer the block size, the more memory and compute it requires, but it can also lead to better performance.
+MAX_ITERS = 2000        # Total number of training iterations. The more iterations, the better the model can perform, but it also takes more time and energy to train.
+LEARNING_RATE = 3e-4    # the standard starting learning rate, often good enough for a first try
+WEIGHT_DECAY = 0.1      # L2 Regularization
+GRAD_CLIP = 1.0         # To prevent exploding gradients
 
 # -----------------------------------------------------------------------------
 
@@ -112,8 +114,10 @@ def main():
         bias=BIAS,
     )
 
+    # create the model and move it to the device
     model = GPT(cfg).to(DEVICE)
 
+    # create the optimizer
     optimizer = torch.optim.AdamW(
         model.parameters(),
         lr=LEARNING_RATE,
@@ -167,6 +171,24 @@ def main():
             print(f"iter {it:5d} | loss {loss.item():.4f}")
 
     print("Training completed.")
+
+    # Save final checkpoint
+    if SAVE_CHECKPOINT:
+        config_dump = {
+            "data_dir": DATA_DIR,
+            "train": {
+                "batch_size": BATCH_SIZE,
+                "block_size": BLOCK_SIZE,
+                "max_iters": MAX_ITERS,
+                "learning_rate": LEARNING_RATE,
+                "weight_decay": WEIGHT_DECAY,
+                "grad_clip": GRAD_CLIP,
+                "dtype": DTYPE,
+                "device": DEVICE,
+            },
+            "model": asdict(cfg),
+        }
+        save_checkpoint(OUT_DIR, model, optimizer, MAX_ITERS, config_dump)
 
 if __name__ == "__main__":
     main()

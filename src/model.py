@@ -1,6 +1,8 @@
 """
 Simplified GPT-style language model for the sustainability case study.
-- Keeping a minimal Transformer decoder-only.
+Minimal Transformer decoder-only.
+
+Source: https://github.com/karpathy/nanoGPT
 """
 
 import math

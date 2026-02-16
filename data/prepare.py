@@ -3,9 +3,9 @@ Prepare the Tiny Shakespeare dataset for character-level language modeling.
 
 It will create (in the same folder):
   data/input.txt  
-  data/train.bin
-  data/val.bin
-  data/meta.pkl
+  data/train.bin        -> 
+  data/val.bin          -> binary files containing the tokenized data for training and validation
+  data/meta.pkl         -> contains char to index mapping for use in prompt.py and get vocab size for train.py
 """
 
 import os
